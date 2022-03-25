@@ -42,3 +42,12 @@ class finanical_data():
         self.get_data()
         self.porfolio_vale()
 
+def check_currency(stocklist):
+    """
+    This takes a long time to run, should only be using if you are not confident on the currency of the stock
+    """
+    cur={}
+    for i in stocklist:
+        cur[i]=tickers.tickers[i].info["currency"]
+    return cur
+
