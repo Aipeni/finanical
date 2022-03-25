@@ -1,18 +1,7 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# #1.Try To scrap the holiday from web
-
-# In[1]:
-
-
 import yfinance as yf
 import pandas_datareader as pdr
 import pandas as pd
 import datetime
-
-
-# In[2]:
 
 
 class finanical_data():
@@ -35,49 +24,21 @@ class finanical_data():
             self.start=self.start-datetime.timedelta(days=2)
     def get_data(self):
         self.latest_trading_day()
-        self.df= pdr.get_data_yahoo(self.stocklist, start=self.start, end=self.end)
+        portfolio={}
+        for i in range(0,len(stocklist)):
+            portfolio[self.stocklist[i]]=self.quantity[i]
+        self.df= yf.download(" ".join(self.stocklist),  start=self.start, end=self.end)
         self.df=self.df["Close"]
         self.df=self.df.iloc[[-1]].T
         self.df.columns=["price"]
-        self.df["quantity"]=self.quantity
+        self.df["quantity"]=self.df.index.map(portfolio)
         self.df["value"]=self.df["price"]*self.df["quantity"]
     def porfolio_vale(self):
         portfolio_value=self.df["value"].sum()
+        print(self.df)
         print(f"The portfolio value is : {portfolio_value}")
     def all_function(self):
         self.latest_trading_day()
         self.get_data()
         self.porfolio_vale()
-
-
-# In[3]:
-
-
-#stocklist=["QQQ","TQQQ","BLOK","VERI","AAPL","TAN","ARKK","ARKX"]
-#quantity=[100,105,99,85,30,50,40,70]
-
-
-# In[4]:
-
-
-#model=finanical_data(stocklist=stocklist,quantity=quantity,start="2020-02-13",end="2022-02-13")
-
-
-# In[5]:
-
-
-#%%time
-#model.all_function()
-
-
-# In[6]:
-
-
-#model.df
-
-
-# In[7]:
-
-
-#model.start
 
