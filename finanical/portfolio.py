@@ -2,6 +2,8 @@ import yfinance as yf
 import pandas_datareader as pdr
 import pandas as pd
 import datetime
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 class finanical_data():
@@ -54,10 +56,16 @@ class finanical_data():
             portfolio_value+=self.df_pass[i]*self.quantity_dictionary[i]
         portfolio_value.fillna(method='ffill',inplace=True)
         self.df_pass["portfolio_value"]=portfolio_value
+        self.df_pass=self.df_pass.round(2)
     def all_function(self):
         self.latest_trading_day()
         self.get_data()
         self.porfolio_vale()
+    def plot_return_against_QQQ(self):
+        plt.plot(self.df_pass["portfolio_value"].pct_change()*100,label="portfolio")
+        plt.plot(self.df_pass["QQQ"].pct_change()*100,label="QQQ")
+        plt.xticks(rotation=90)
+        plt.legend();
 
         
 def check_currency(stocklist):
